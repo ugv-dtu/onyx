@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package format="3">
+  <name>logger</name>
+  <version>0.0.0</version>
+  <description>Sensor recording and run logging</description>
+  <maintainer email="ario@todo.todo">ario</maintainer>
+  <license>MIT</license>
+  <depend>rclpy</depend>
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+  <exec_depend>rosbag2</exec_depend>
+</package>
