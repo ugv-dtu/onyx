@@ -11,6 +11,7 @@ def configure(context):
     mode = LaunchConfiguration('mode').perform(context)
     train = LaunchConfiguration('train').perform(context)
     use_sim_time = LaunchConfiguration('use_sim_time').perform(context)
+    use_rviz = LaunchConfiguration('use_rviz').perform(context)
     policy = LaunchConfiguration('policy').perform(context).strip()
 
     if mode not in ('mppi', 'rl', 'mppi_rl'):
@@ -42,12 +43,30 @@ def configure(context):
     environment = 'simulation' if simulation else 'real'
     operation = 'training' if training else 'evaluation or operation'
 
-    return [
+    actions = [
         LogInfo(msg=f'Environment: {environment}'),
         LogInfo(msg=f'Mode: {mode}'),
         LogInfo(msg=f'Operation: {operation}'),
-        LogInfo(msg='Launch configuration validated. Component startup is pending.'),
     ]
+
+    if mode == 'mppi':
+        actions.append(
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    PathJoinSubstitution([
+                        FindPackageShare('planning'),
+                        'launch',
+                        'planning.launch.py',
+                    ])
+                ),
+                launch_arguments={
+                    'use_sim_time': use_sim_time,
+                    'use_rviz': use_rviz,
+                }.items(),
+            )
+        )
+
+    return actions
 
 
 def generate_launch_description():
@@ -67,6 +86,11 @@ def generate_launch_description():
             'use_sim_time',
             default_value='false',
             description='Use the simulation clock.',
+        ),
+        DeclareLaunchArgument(
+            'use_rviz',
+            default_value='true',
+            description='Launch navigation RViz2 window.',
         ),
         DeclareLaunchArgument(
             'mode',

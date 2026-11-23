@@ -1,8 +1,8 @@
 from launch import LaunchDescription
 from launch.actions import (
-    DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction,
-    SetEnvironmentVariable, TimerAction)
-from launch.conditions import UnlessCondition
+    DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable,
+    TimerAction)
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import (
     EnvironmentVariable, LaunchConfiguration, PathJoinSubstitution,
@@ -12,14 +12,12 @@ from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackagePrefix, FindPackageShare
 
 
-def launch_setup(context, *args, **kwargs):
-    world_choice = LaunchConfiguration('world_name').perform(context).lower()
-    is_arena = world_choice in ('arena', 'navigation_arena', 'onyx_arena')
-    world_filename = 'navigation_arena.sdf' if is_arena else 'tekno_world.sdf'
-    gz_world_name = 'onyx_arena' if is_arena else 'tekno_world'
+def generate_launch_description():
+    world_name = LaunchConfiguration('world')
+    world_sdf = PythonExpression(["'", world_name, ".sdf'"])
 
-    world_path = PathJoinSubstitution([
-        FindPackageShare('simulation'), 'worlds', world_filename])
+    world = PathJoinSubstitution([
+        FindPackageShare('simulation'), 'worlds', world_sdf])
 
     sim_flags = PythonExpression([
         "'-r -s ' if '", LaunchConfiguration('headless'),
@@ -37,8 +35,8 @@ def launch_setup(context, *args, **kwargs):
             package='ros_gz_sim',
             executable='create',
             arguments=[
-                '-world', gz_world_name,
-                '-topic', '/robot_description',
+                '-world', world_name,
+                '-topic', 'robot_description',
                 '-name', 'onyx',
             ],
             output='screen',
@@ -100,17 +98,32 @@ def launch_setup(context, *args, **kwargs):
         output='screen',
     )
 
+    show_sim_rviz = PythonExpression([
+        "'", LaunchConfiguration('headless'), "' != 'true' and '",
+        LaunchConfiguration('use_rviz'), "' == 'true'"
+    ])
+
     rviz = Node(
         package='rviz2',
         executable='rviz2',
         arguments=['-d', PathJoinSubstitution([
             FindPackageShare('simulation'), 'rviz', 'onyx_lidar.rviz'])],
         parameters=[{'use_sim_time': True}],
-        condition=UnlessCondition(LaunchConfiguration('headless')),
+        condition=IfCondition(show_sim_rviz),
         output='screen',
     )
 
-    return [
+    return LaunchDescription([
+        DeclareLaunchArgument(
+            'world', default_value='tekno_world',
+            description='World name without .sdf (tekno_world or mppi_test_world).'),
+        DeclareLaunchArgument(
+            'headless', default_value='false',
+            description='true = no window (use for training).'),
+        DeclareLaunchArgument(
+            'use_rviz', default_value='true',
+            description='Launch simulation RViz2 window.'),
+        SetEnvironmentVariable('GZ_SIM_RESOURCE_PATH', resource_path),
         gz_sim,
         spawn_robot,
         bridges,
