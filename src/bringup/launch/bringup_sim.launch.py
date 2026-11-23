@@ -23,9 +23,18 @@ def generate_launch_description():
             ])
         ),
         launch_arguments={
+<<<<<<< ours
             'world': LaunchConfiguration('world'),
             'headless': LaunchConfiguration('headless'),
             'use_rviz': sim_rviz,
+=======
+            'headless': LaunchConfiguration('headless'),
+            'world_name': LaunchConfiguration('world'),
+            'seed': LaunchConfiguration('seed'),
+            'min_obstacles': LaunchConfiguration('min_obstacles'),
+            'max_obstacles': LaunchConfiguration('max_obstacles'),
+            'publish_world_tf': LaunchConfiguration('publish_world_tf'),
+>>>>>>> theirs
         }.items(),
     )
 
@@ -54,8 +63,13 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument(
             'world',
+<<<<<<< ours
             default_value='tekno_world',
             description='World name without .sdf (tekno_world or mppi_test_world).',
+=======
+            default_value='arena',
+            description='Simulation world to load: arena or tekno.',
+>>>>>>> theirs
         ),
         DeclareLaunchArgument(
             'mode',
@@ -65,7 +79,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'train',
             default_value='false',
-            description='Enable RL training.',
+            description='Enable RL training mode.',
         ),
         DeclareLaunchArgument(
             'policy',
@@ -76,6 +90,26 @@ def generate_launch_description():
             'headless',
             default_value='false',
             description='Run Gazebo in headless mode.',
+        ),
+        DeclareLaunchArgument(
+            'seed',
+            default_value='-1',
+            description='Random seed for arena layout (-1 for random).',
+        ),
+        DeclareLaunchArgument(
+            'min_obstacles',
+            default_value='3',
+            description='Minimum active obstacles on reset.',
+        ),
+        DeclareLaunchArgument(
+            'max_obstacles',
+            default_value='10',
+            description='Maximum active obstacles on reset.',
+        ),
+        DeclareLaunchArgument(
+            'publish_world_tf',
+            default_value='true',
+            description='Publish ground-truth world->odom TF.',
         ),
         simulation,
         base_delayed,

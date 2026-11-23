@@ -1,0 +1,511 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.9">
+  <world name="onyx_arena">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics" />
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands" />
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster" />
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu" />
+    <plugin filename="gz-sim-navsat-system" name="gz::sim::systems::NavSat" />
+    <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact" />
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>0</latitude_deg>
+      <longitude_deg>0</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <gravity>0 0 -9.81</gravity>
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.6 0.6 0.6 1</ambient>
+            <diffuse>0.6 0.6 0.6 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="wall_north">
+      <static>true</static>
+      <pose>0 12.1 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>24.4 0.2 1</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>24.4 0.2 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.15 0.18 1</ambient>
+            <diffuse>0.15 0.15 0.18 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="wall_south">
+      <static>true</static>
+      <pose>0 -12.1 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>24.4 0.2 1</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>24.4 0.2 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.15 0.18 1</ambient>
+            <diffuse>0.15 0.15 0.18 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="wall_east">
+      <static>true</static>
+      <pose>12.1 0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.2 24 1</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.2 24 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.15 0.18 1</ambient>
+            <diffuse>0.15 0.15 0.18 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="wall_west">
+      <static>true</static>
+      <pose>-12.1 0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.2 24 1</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.2 24 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.15 0.18 1</ambient>
+            <diffuse>0.15 0.15 0.18 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="goal_marker">
+      <static>true</static>
+      <pose>4 -4 0.015 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.5</radius>
+              <length>0.03</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.05 0.8 0.15 1</ambient>
+            <diffuse>0.05 0.8 0.15 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="obstacle_1">
+      <static>true</static>
+      <pose>2.8 1.7 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>1.0 0.28 0.02 1</ambient>
+            <diffuse>1.0 0.28 0.02 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="obstacle_2">
+      <static>true</static>
+      <pose>-2.8 -1.7 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>1.0 0.28 0.02 1</ambient>
+            <diffuse>1.0 0.28 0.02 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="obstacle_3">
+      <static>true</static>
+      <pose>-2.8 2.5 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>1.0 0.28 0.02 1</ambient>
+            <diffuse>1.0 0.28 0.02 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="obstacle_4">
+      <static>true</static>
+      <pose>39.0 30.0 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>1.0 0.28 0.02 1</ambient>
+            <diffuse>1.0 0.28 0.02 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="obstacle_5">
+      <static>true</static>
+      <pose>30.0 33.0 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>1.0 0.28 0.02 1</ambient>
+            <diffuse>1.0 0.28 0.02 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="obstacle_6">
+      <static>true</static>
+      <pose>33.0 33.0 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>1.0 0.28 0.02 1</ambient>
+            <diffuse>1.0 0.28 0.02 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="obstacle_7">
+      <static>true</static>
+      <pose>36.0 33.0 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>1.0 0.28 0.02 1</ambient>
+            <diffuse>1.0 0.28 0.02 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="obstacle_8">
+      <static>true</static>
+      <pose>39.0 33.0 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>1.0 0.28 0.02 1</ambient>
+            <diffuse>1.0 0.28 0.02 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="obstacle_9">
+      <static>true</static>
+      <pose>30.0 36.0 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>1.0 0.28 0.02 1</ambient>
+            <diffuse>1.0 0.28 0.02 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+    <model name="obstacle_10">
+      <static>true</static>
+      <pose>33.0 36.0 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>meshes/traffic_cone.obj</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>1.0 0.28 0.02 1</ambient>
+            <diffuse>1.0 0.28 0.02 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="arena_contact" type="contact">
+          <always_on>true</always_on>
+          <contact>
+            <collision>collision</collision>
+            <topic>/arena/contact</topic>
+          </contact>
+        </sensor>
+      </link>
+    </model>
+  </world>
+</sdf>

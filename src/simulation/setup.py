@@ -16,6 +16,8 @@ setup(
             glob('launch/*.launch.py')),
         (os.path.join('share', package_name, 'worlds'),
             glob('worlds/*')),
+        (os.path.join('share', package_name, 'meshes'),
+            glob('meshes/*')),
         (os.path.join('share', package_name, 'rviz'),
             glob('rviz/*.rviz')),
     ],
@@ -29,6 +31,7 @@ setup(
     entry_points={
         'console_scripts': [
             'onyx_gps_visualizer = simulation.gps_visualizer:main',
+            'arena_env = simulation.arena_env:main',
         ],
     },
 )
